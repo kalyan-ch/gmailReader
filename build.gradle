@@ -1,6 +1,6 @@
 plugins {
-	id 'org.springframework.boot' version '2.1.4.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.1.4.RELEASE'
+    id 'java'
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -10,10 +10,15 @@ version = '0.0.1'
 sourceCompatibility = '1.8'
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation(
+            'org.springframework.boot:spring-boot-starter-web',
+            'com.google.api-client:google-api-client:1.23.0',
+            'com.google.oauth-client:google-oauth-client-jetty:1.23.0',
+            'com.google.apis:google-api-services-gmail:v1-rev83-1.23.0'
+    )
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
