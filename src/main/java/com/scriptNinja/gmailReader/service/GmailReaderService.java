@@ -67,8 +67,8 @@ public class GmailReaderService {
                 .build();
     }
 
-    public void searchEmails(String query) throws Exception{
-        String searchQuery = "from:foodsby";
+    public String searchEmails(String query) throws Exception{
+        String searchQuery = "from:uber";
         /*if ("IREA".equalsIgnoreCase(query)) {
             searchQuery = ireaQuery;
         }else{
@@ -76,10 +76,21 @@ public class GmailReaderService {
         }*/
         authenticateUser();
         ListMessagesResponse response = service.users().messages().list("me").setQ(searchQuery).execute();
-        for(Message m : response.getMessages()){
-            System.out.println(m.toPrettyString());
+        StringBuilder sb = new StringBuilder();
+        if(response.getMessages() != null){
+            for(Message m : response.getMessages()){
+                Message message = service.users().messages().get("me", m.getId()).execute();
+                String received = message.getPayload().getHeaders().get(1).getValue();
+                String[] smtpIdAndTime = received.split(";");
+                String dateTime = smtpIdAndTime[1].trim();
+                sb.append(dateTime);
+                sb.append(" ");
+                sb.append(message.getSnippet());
+                sb.append("\n");
+            }
         }
 
+        return sb.toString();
     }
 
     public List<Label> readLabels() throws Exception{
